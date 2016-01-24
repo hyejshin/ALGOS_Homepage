@@ -163,13 +163,20 @@
 		}
 	}
 	
-	function checkAnswer(){
+	function checkAnswer() {
 		var possible = true;
-		var i, j;
+		var i, j, y, x, id;
 	
+		for(i=0; i<81; i++){
+			y = Math.floor(i/9);
+			x = i%9;
+			id = "n" + i;
+			X[y][x] = document.getElementById(id).value;
+		}
+		
 		for(i=0; i<9; i++){
 			for(j=0; j<9; j++)
-				if(X[i][j] != A[i][j] && X[i][j] != 0){
+				if(checkValidity(i, j, X[i][j])==false){
 					possible = false;
 					break;
 				}
@@ -183,7 +190,24 @@
 			alert("오답입니다. 다시 시도해 보세요!");
 	}
 	
-	
+	function checkValidity(y, x, num){
+		var i, j, box;
+
+		for(i=0; i<9; i++){
+			if(X[y][i] == num && x!=i)
+				return false;
+			if(X[i][x] == num && y!=i)
+				return false;
+		}
+
+		box = (Math.floor(y/3))*3 + Math.floor(x/3);
+		for(i=Math.floor(box/3)*3; i<Math.floor(box/3)*3+3; i++)
+	        for(j=box%3*3; j<box%3*3+3; j++)
+	            if(X[i][j] == num && !(y==i && x==j))
+	                return false;
+
+		return true;
+	}
 	
 	function printX(){
 		var i, y, x, id;
